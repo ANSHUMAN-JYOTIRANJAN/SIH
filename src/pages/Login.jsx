@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Auth.css";
 
@@ -12,12 +12,12 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     login(email);
-    navigate("/dashboard");yo
+    navigate("/dashboard");
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="auth-container">
+      <div className="auth-card">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -37,7 +37,7 @@ function Login() {
           <button type="submit">Login</button>
         </form>
         <p>
-          Don’t have an account? <a href="/signup">Sign Up</a>
+          Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
     </div>

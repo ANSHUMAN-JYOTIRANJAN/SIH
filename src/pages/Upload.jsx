@@ -20,103 +20,66 @@ function Upload() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // ✅ Set limits
-    const limits = {
-      iron: 100,
-      copper: 50,
-      zinc: 70,
-      lead: 10,
-      cadmium: 5,
-    };
-
-    // ✅ Validation with specific alerts
-    for (const key in formData) {
-      const value = Number(formData[key]);
-      if (value < 0) {
-        alert(`${key.toUpperCase()} cannot be negative!`);
-        return;
-      }
-      if (value > limits[key]) {
-        alert(
-          `⚠️ ${key.toUpperCase()} value (${value}) exceeds the safe limit of ${limits[key]} mg/L`
-        );
-        return;
-      }
-    }
-
-    console.log("Form submitted:", formData);
     alert("✅ Data uploaded successfully!");
+    console.log("Form submitted:", formData);
   };
 
   return (
-    <div style={{ maxWidth: "500px", margin: "0 auto" }}>
-      <h2>Upload Sample Data</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={fieldStyle}>
-          <label>Iron (Fe):</label>
-          <input
-            type="number"
-            name="iron"
-            value={formData.iron}
-            onChange={handleChange}
-            min="0"
-            max="100"
-          />
-        </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #1e3a8a, #2563eb)", // ✅ dark blue gradient
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "40px 20px",
+      }}
+    >
+      <div
+        style={{
+          background: "white",
+          padding: "30px",
+          borderRadius: "12px",
+          boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
+          width: "100%",
+          maxWidth: "500px",
+        }}
+      >
+        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#1e3a8a" }}>
+          Upload Sample Data
+        </h2>
 
-        <div style={fieldStyle}>
-          <label>Copper (Cu):</label>
-          <input
-            type="number"
-            name="copper"
-            value={formData.copper}
-            onChange={handleChange}
-            min="0"
-            max="50"
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Iron (Fe):</label>
+            <input type="number" name="iron" value={formData.iron} onChange={handleChange} />
+          </div>
 
-        <div style={fieldStyle}>
-          <label>Zinc (Zn):</label>
-          <input
-            type="number"
-            name="zinc"
-            value={formData.zinc}
-            onChange={handleChange}
-            min="0"
-            max="70"
-          />
-        </div>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Copper (Cu):</label>
+            <input type="number" name="copper" value={formData.copper} onChange={handleChange} />
+          </div>
 
-        <div style={fieldStyle}>
-          <label>Lead (Pb):</label>
-          <input
-            type="number"
-            name="lead"
-            value={formData.lead}
-            onChange={handleChange}
-            min="0"
-            max="10"
-          />
-        </div>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Zinc (Zn):</label>
+            <input type="number" name="zinc" value={formData.zinc} onChange={handleChange} />
+          </div>
 
-        <div style={fieldStyle}>
-          <label>Cadmium (Cd):</label>
-          <input
-            type="number"
-            name="cadmium"
-            value={formData.cadmium}
-            onChange={handleChange}
-            min="0"
-            max="5"
-          />
-        </div>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Lead (Pb):</label>
+            <input type="number" name="lead" value={formData.lead} onChange={handleChange} />
+          </div>
 
-        <button type="submit" style={btnStyle}>
-          Submit
-        </button>
-      </form>
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Cadmium (Cd):</label>
+            <input type="number" name="cadmium" value={formData.cadmium} onChange={handleChange} />
+          </div>
+
+          <button type="submit" style={btnStyle}>
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
@@ -128,13 +91,21 @@ const fieldStyle = {
   alignItems: "center",
 };
 
+const labelStyle = {
+  color: "black", // ✅ makes labels black
+  fontWeight: "600",
+};
+
 const btnStyle = {
-  padding: "10px 20px",
-  background: "#007bff",
+  width: "100%",
+  padding: "12px",
+  background: "#2563eb",
   color: "white",
   border: "none",
-  borderRadius: "5px",
+  borderRadius: "8px",
   cursor: "pointer",
+  fontWeight: "600",
+  marginTop: "10px",
 };
 
 export default Upload;

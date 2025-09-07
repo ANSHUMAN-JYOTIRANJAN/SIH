@@ -1,10 +1,43 @@
+/* --- Global app layout --- */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Page content (Dashboard, Upload, Visualization) --- */
+.page-content {
+  flex: 1;
+  padding: 20px;
+  margin-top: 60px; /* space for navbar */
+  margin-left: 200px; /* default sidebar width */
+  transition: margin-left 0.3s;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb); /* ✅ dashboard background */
+  color: white;
+  min-height: calc(100vh - 60px - 40px); /* viewport - navbar - footer */
+}
+
+/* Sidebar collapsed */
+.page-content.sidebar-closed {
+  margin-left: 60px;
+}
+
+/* --- Footer --- */
+footer {
+  padding: 12px;
+  text-align: center;
+  background: #0f172a;
+  color: white;
+  margin-top: auto; /* ✅ sticks to bottom */
+}
+
 /* --- Auth container shared for login/signup --- */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f5f6fa;
+  background: #f5f6fa; /* ✅ different background */
   padding: 1rem;
 }
 
@@ -79,6 +112,8 @@
 .auth-card a:hover {
   text-decoration: underline;
 }
+
+/* --- Login form extra style --- */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -112,14 +147,3 @@
 .login-form button:hover {
   background: #1d4ed8;
 }
-/* --- Footer alignment fix --- */
-footer {
-  padding: 12px;
-  text-align: center;
-
-  width: 100%;
-  position: relative;
-  bottom: 0;
-}
-
-

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Auth.css";
 
@@ -11,14 +11,13 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Save both email & password (for now we just send email to context)
     signup(email);
-    navigate("/login"); // ✅ redirect to login after signup
+    navigate("/login");
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="auth-container">
+      <div className="auth-card">
         <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -38,7 +37,7 @@ function Signup() {
           <button type="submit">Sign Up</button>
         </form>
         <p>
-          Already have an account? <a href="/login">Login</a>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
@@ -46,4 +45,3 @@ function Signup() {
 }
 
 export default Signup;
-

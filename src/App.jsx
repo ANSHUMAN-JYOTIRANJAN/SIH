@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
@@ -29,6 +30,7 @@ function App() {
 
             {/* Main Content */}
             <div
+              className="page-content" // ✅ added class
               style={{
                 flex: 1,
                 marginLeft: sidebarOpen ? "200px" : "60px", // ✅ shifts with sidebar

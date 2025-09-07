@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { FaSearch } from "react-icons/fa";
 
 function Navbar({ sidebarOpen }) {
   const { user, logout } = useAuth();
@@ -16,27 +17,62 @@ function Navbar({ sidebarOpen }) {
         borderBottom: "1px solid #0f172a",
         position: "fixed",
         top: 0,
-        left: sidebarOpen ? "200px" : "60px", // ✅ shift with sidebar
-        width: `calc(100% - ${sidebarOpen ? "200px" : "60px"})`, // ✅ shrink
+        left: sidebarOpen ? "200px" : "60px",
+        width: `calc(100% - ${sidebarOpen ? "200px" : "60px"})`,
         zIndex: 1000,
         transition: "all 0.3s",
         boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
       }}
     >
-      <div>
-        <h1
+      {/* Left side: Title */}
+      <h1
+        style={{
+          color: "white",
+          fontSize: "20px",
+          fontWeight: "bold",
+          letterSpacing: "1px",
+        }}
+      >
+        HMPI Dashboard
+      </h1>
+
+      {/* Right side: Search + Auth */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px", // ✅ spacing control
+          flexShrink: 0, // ✅ prevents items from squeezing out
+        }}
+      >
+        {/* Search box */}
+        <div
           style={{
-            color: "white",
-            fontSize: "20px",
-            fontWeight: "bold",
-            letterSpacing: "1px",
+            display: "flex",
+            alignItems: "center",
+            background: "white",
+            borderRadius: "20px",
+            padding: "4px 10px",
+            maxWidth: "180px", // ✅ controlled width
+          
           }}
         >
-          HMPI Dashboard
-        </h1>
-      </div>
+          <input
+            type="text"
+            placeholder="Search..."
+            style={{
+              border: "none",
+              outline: "none",
+              flex: 1,
+              fontSize: "14px",
+              background: "transparent",
+              minWidth: "80px", // ✅ don’t shrink too small
+            }}
+          />
+          <FaSearch style={{ color: "#2563eb", cursor: "pointer" }} />
+        </div>
 
-      <div>
+        {/* Auth buttons */}
         {!user ? (
           <>
             <Link to="/signup" style={linkStyle}>
@@ -57,14 +93,12 @@ function Navbar({ sidebarOpen }) {
 }
 
 const linkStyle = {
-  marginLeft: "20px",
   color: "white",
   textDecoration: "none",
   fontWeight: "600",
 };
 
 const btnStyle = {
-  marginLeft: "20px",
   background: "transparent",
   border: "1px solid white",
   color: "white",
