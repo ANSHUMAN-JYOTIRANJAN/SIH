@@ -20,7 +20,15 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="app-container">
+        <div
+          className="app-container"
+          style={{
+            minHeight: "100vh",
+            background:
+              "linear-gradient(90deg, #132758 60%, #243375 100%)", // Unified blue blend background
+            margin: 0,
+          }}
+        >
           {/* Navbar shifts with sidebar */}
           <Navbar sidebarOpen={sidebarOpen} />
 
@@ -30,13 +38,15 @@ function App() {
 
             {/* Main Content */}
             <div
-              className="page-content" // ✅ added class
+              className="page-content"
               style={{
                 flex: 1,
-                marginLeft: sidebarOpen ? "200px" : "60px", // ✅ shifts with sidebar
-                marginTop: "70px", // ✅ pushes below fixed navbar
+                marginLeft: sidebarOpen ? "200px" : "60px",
+                marginTop: "70px",
                 transition: "margin-left 0.3s, margin-top 0.3s",
                 padding: "20px",
+                background: "transparent", // Remove any default white!
+                minHeight: "calc(100vh - 70px - 40px)", // Adjust if footer is taller
               }}
             >
               <Routes>
@@ -87,3 +97,4 @@ function App() {
 }
 
 export default App;
+

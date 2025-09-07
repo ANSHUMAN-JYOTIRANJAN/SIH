@@ -19,7 +19,7 @@ function FileUpload({ onDataProcessed }) {
       const res = await axios.post("http://localhost:5000/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      // Call parent with whatever chart data your backend returns
+     
       onDataProcessed && onDataProcessed(res.data); 
       alert("File uploaded successfully!");
     } catch (e) {
