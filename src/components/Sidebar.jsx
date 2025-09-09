@@ -12,22 +12,20 @@ function Sidebar({ onToggle, onLogout }) {
   };
 
   return (
-    <div
-      style={{
-        width: isOpen ? "200px" : "60px",
-        background: "linear-gradient(180deg, #1a2a6c, #0d1b33)", // blue gradient
-        color: "#fff",
-        height: "100vh",
-        transition: "width 0.3s",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        zIndex: 1001,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between", // 👈 pushes footer to bottom
-      }}
-    >
+   <div
+  style={{
+    width: isOpen ? "200px" : "60px",
+    background: "linear-gradient(180deg, #1a2a6c, #0d1b33)",
+    color: "#fff",
+    height: "100vh",
+    transition: "width 0.3s",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: 2001,
+     
+  }}
+  >
       {/* Top: Toggle + Nav */}
       <div>
         <button

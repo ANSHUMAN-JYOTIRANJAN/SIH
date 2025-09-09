@@ -147,3 +147,26 @@ footer {
 .login-form button:hover {
   background: #1d4ed8;
 }
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    width: 200px !important;
+    left: -200px;
+    transition: left 0.3s ease;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .footer {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .page-content {
+    margin-left: 0 !important;
+  }
+  .navbar {
+    left: 0 !important;
+    width: 100% !important;
+  }
+}
+

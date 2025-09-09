@@ -4,6 +4,7 @@ import ChartExample from "../components/ChartExample";
 import SearchPincode from "../components/SearchPincode";
 import "./Dashboard.css";
 
+
 const Dashboard = () => {
   const [chartData, setChartData] = useState(null);
   const [location, setLocation] = useState(null);
