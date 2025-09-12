@@ -1,4 +1,6 @@
-.Sidebar-link {
+/* src/components/sidebar.css */
+
+.sidebar-link {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -10,10 +12,10 @@
   transition: all 0.3s ease;
 }
 
-.Sidebar-link:hover {
+.sidebar-link:hover {
   background-color: #1f4068;
 }
 
-.Sidebar-link.active {
+.sidebar-link.active {
   background-color: #0f2a5a; /* Highlight for active link */
 }

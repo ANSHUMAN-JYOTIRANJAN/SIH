@@ -1,4 +1,4 @@
-// Sidebar.jsx
+// src/components/sidebar.jsx
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -8,7 +8,7 @@ import {
   FaChartLine,
   FaRegFileAlt,
 } from "react-icons/fa";
-import "./Sidebar.css"; // Make sure file is named exactly Sidebar.css
+import "./sidebar.css"; // ✅ file must be lowercase
 
 function Sidebar({ onToggle }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ function Sidebar({ onToggle }) {
   const toggleSidebar = () => {
     const newState = !isOpen;
     setIsOpen(newState);
-    if (onToggle) onToggle(newState); // safeguard if prop is missing
+    if (onToggle) onToggle(newState);
   };
 
   return (
@@ -59,28 +59,28 @@ function Sidebar({ onToggle }) {
       <div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
         <NavLink
           to="/dashboard"
-          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
         >
           <FaTachometerAlt /> {isOpen && "Dashboard"}
         </NavLink>
 
         <NavLink
           to="/upload"
-          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
         >
           <FaUpload /> {isOpen && "Upload"}
         </NavLink>
 
         <NavLink
           to="/visualization"
-          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
         >
           <FaChartLine /> {isOpen && "Visualization"}
         </NavLink>
 
         <NavLink
           to="/reports"
-          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
         >
           <FaRegFileAlt /> {isOpen && "Reports"}
         </NavLink>
