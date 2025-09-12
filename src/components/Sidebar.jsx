@@ -60,34 +60,34 @@ function Sidebar({ onToggle }) {
         <div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
           <NavLink
             to="/dashboard"
-            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
           >
             <FaTachometerAlt /> {isOpen && "Dashboard"}
           </NavLink>
 
           <NavLink
             to="/upload"
-            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
           >
             <FaUpload /> {isOpen && "Upload"}
           </NavLink>
 
           <NavLink
             to="/visualization"
-            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
           >
             <FaChartLine /> {isOpen && "Visualization"}
           </NavLink>
 
           <NavLink
             to="/reports"
-            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
           >
             <FaRegFileAlt /> {isOpen && "Reports"}
           </NavLink>
            <NavLink
             to="/C"
-            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
           >
             <FaRegFileAlt /> {isOpen && "Reports"}
           </NavLink>
