@@ -17,10 +17,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 // Context
-import ProtectedRoute from "./context/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-
-import "./App.css";
+import RoleProtectedRoute from "./context/RoleProtectedRoute";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,88 +26,70 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div
-          className="app-container"
-          style={{
-            minHeight: "100vh",
-            background:
-              "linear-gradient(90deg, #132758 60%, #243375 100%)",
-            margin: 0,
-          }}
-        >
-          {/* Navbar shifts with sidebar */}
-          <Navbar sidebarOpen={sidebarOpen} />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-          <div style={{ display: "flex" }}>
-            {/* Sidebar */}
-            <Sidebar onToggle={setSidebarOpen} />
+          {/* Protected App Routes */}
+          <Route
+            path="/*"
+            element={
+              <div style={{
+                minHeight: "100vh",
+                background: "linear-gradient(90deg, #132758 60%, #243375 100%)",
+              }}>
+                <Navbar sidebarOpen={sidebarOpen} />
+                <div style={{ display: "flex" }}>
+                  <Sidebar onToggle={setSidebarOpen} />
+                  <div style={{
+                    flex: 1,
+                    marginLeft: sidebarOpen ? "200px" : "60px",
+                    marginTop: "70px",
+                    transition: "margin-left 0.3s, margin-top 0.3s",
+                    padding: "20px",
+                    background: "transparent",
+                    minHeight: "calc(100vh - 70px - 40px)",
+                  }}>
+                    <Routes>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
 
-            {/* Main Content */}
-            <div
-              className="page-content"
-              style={{
-                flex: 1,
-                marginLeft: sidebarOpen ? "200px" : "60px",
-                marginTop: "70px",
-                transition: "margin-left 0.3s, margin-top 0.3s",
-                padding: "20px",
-                background: "transparent",
-                minHeight: "calc(100vh - 70px - 40px)",
-              }}
-            >
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Signup />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
+                      {/* Only scientists can access Upload */}
+                      <Route path="/upload" element={
+                        <RoleProtectedRoute allowedRoles={["scientist"]}>
+                          <Upload />
+                        </RoleProtectedRoute>
+                      } />
 
-                {/* Protected Routes */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/upload"
-                  element={
-                    <ProtectedRoute>
-                      <Upload />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/search"
-                  element={
-                    <ProtectedRoute>
-                      <Search />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/visualization"
-                  element={
-                    <ProtectedRoute>
-                      <Visualization />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/reports" // ✅ fixed path to lowercase and leading slash
-                  element={
-                    <ProtectedRoute>
-                      <Reports />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </div>
-          </div>
+                      {/* Only researchers can access Search */}
+                      <Route path="/search" element={
+                        <RoleProtectedRoute allowedRoles={["researcher"]}>
+                          <Search />
+                        </RoleProtectedRoute>
+                      } />
 
-          <Footer />
-        </div>
+                      {/* Scientists & Policymakers can access Visualization */}
+                      <Route path="/visualization" element={
+                        <RoleProtectedRoute allowedRoles={["scientist", "policymaker"]}>
+                          <Visualization />
+                        </RoleProtectedRoute>
+                      } />
+
+                      {/* Only Policymakers can access Reports */}
+                      <Route path="/reports" element={
+                        <RoleProtectedRoute allowedRoles={["policymaker"]}>
+                          <Reports />
+                        </RoleProtectedRoute>
+                      } />
+                    </Routes>
+                  </div>
+                </div>
+                <Footer />
+              </div>
+            }
+          />
+        </Routes>
       </Router>
     </AuthProvider>
   );

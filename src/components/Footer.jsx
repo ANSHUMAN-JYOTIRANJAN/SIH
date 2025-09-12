@@ -36,12 +36,13 @@ export default function Footer() {
         {/* Social Media */}
         <div className="footer-social">
           <h3>Follow Us</h3>
-          <div className="social-icons">
-            <a href="#">🐦</a>
-            <a href="#">📘</a>
-            <a href="#">📸</a>
-            <a href="#">💼</a>
+         <div className="social-icons">
+            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer">🐦 Twitter</a>
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">📘 Facebook</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
           </div>
+
         </div>
       </div>
 

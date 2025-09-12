@@ -1,3 +1,4 @@
+// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -36,9 +37,7 @@ function Login() {
           />
           <button type="submit">Login</button>
         </form>
-        <p>
-          Don’t have an account? <Link to="/signup">Sign Up</Link>
-        </p>
+        <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
       </div>
     </div>
   );
