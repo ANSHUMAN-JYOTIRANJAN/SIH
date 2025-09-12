@@ -1,16 +1,18 @@
-// src/context/RoleProtectedRoute.js
+// src/context/ProtectedRoute.js
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
-const RoleProtectedRoute = ({ children, allowedRoles }) => {
+const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
 
-  if (!user) return <Navigate to="/login" replace />;
+  // If user is not logged in, redirect to login
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-  if (!allowedRoles.includes(user.role)) return <Navigate to="/dashboard" replace />;
-
+  // If logged in, allow access
   return children;
 };
 
-export default RoleProtectedRoute;
+export default ProtectedRoute;
