@@ -33,7 +33,7 @@ function Navbar({ sidebarOpen }) {
           letterSpacing: "1px",
         }}
       >
-        HMPI Dashboard
+        Water Safety Index
       </h1>
 
       {/* Right side: Search + Auth */}

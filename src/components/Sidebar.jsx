@@ -1,8 +1,16 @@
+// Sidebar.jsx
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaUpload, FaChartBar, FaBars, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaUpload,
+  FaTachometerAlt,
+  FaBars,
+  FaChartLine,
+  FaRegFileAlt,
+} from "react-icons/fa";
+import "./Sidebar.css"; // Import the CSS
 
-function Sidebar({ onToggle, onLogout }) {
+function Sidebar({ onToggle }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -12,22 +20,23 @@ function Sidebar({ onToggle, onLogout }) {
   };
 
   return (
-   <div
-  style={{
-    width: isOpen ? "200px" : "60px",
-    background: "linear-gradient(180deg, #1a2a6c, #0d1b33)",
-    color: "#fff",
-    height: "100vh",
-    transition: "width 0.3s",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    zIndex: 2001,
-     
-  }}
-  >
-      {/* Top: Toggle + Nav */}
+    <div
+      style={{
+        width: isOpen ? "200px" : "60px",
+        background: "linear-gradient(180deg, #1a2a6c, #0d1b33)",
+        color: "#fff",
+        height: "100vh",
+        transition: "width 0.3s",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 2001,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <div>
+        {/* Toggle Button */}
         <button
           onClick={toggleSidebar}
           style={{
@@ -47,65 +56,45 @@ function Sidebar({ onToggle, onLogout }) {
           <FaBars />
         </button>
 
-        <div style={{ marginTop: "20px" }}>
-          <NavLink to="/dashboard" style={navStyle(isOpen)}>
-            <FaChartBar /> {isOpen && "Dashboard"}
+        {/* Links */}
+        <div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+          >
+            <FaTachometerAlt /> {isOpen && "Dashboard"}
           </NavLink>
-          <NavLink to="/upload" style={navStyle(isOpen)}>
+
+          <NavLink
+            to="/upload"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+          >
             <FaUpload /> {isOpen && "Upload"}
           </NavLink>
-          <NavLink to="/visualization" style={navStyle(isOpen)}>
-            <FaChartBar /> {isOpen && "Visualization"}
+
+          <NavLink
+            to="/visualization"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+          >
+            <FaChartLine /> {isOpen && "Visualization"}
           </NavLink>
-        </div>
-      </div>
 
-      {/* Bottom: Footer & Logout */}
-      <div style={{ padding: "10px" }}>
-        {/* Logout Button */}
-        <button
-          onClick={onLogout}
-          style={{
-            ...navStyle(isOpen),
-            width: "100%",
-            background: "transparent",
-            border: "none",
-            textAlign: "left",
-            cursor: "pointer",
-            marginBottom: "10px",
-          }}
-        >
-
-        </button>
-
-        {/* Footer Text */}
-        <div
-          style={{
-            fontSize: isOpen ? "12px" : "10px",
-            color: "#bbb",
-            textAlign: isOpen ? "center" : "left",
-          }}
-        >
-        
+          <NavLink
+            to="/reports"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+          >
+            <FaRegFileAlt /> {isOpen && "Reports"}
+          </NavLink>
+           <NavLink
+            to="/C"
+            className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+          >
+            <FaRegFileAlt /> {isOpen && "Reports"}
+          </NavLink>
         </div>
       </div>
     </div>
   );
 }
 
-const navStyle = (isOpen) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  padding: "12px 15px",
-  textDecoration: "none",
-  color: "white",
-  fontSize: "16px",
-  borderRadius: "8px",
-  transition: "all 0.3s ease",
-  backgroundColor: "transparent",
-  cursor: "pointer",
-});
-
 export default Sidebar;
-

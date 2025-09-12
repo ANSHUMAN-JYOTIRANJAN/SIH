@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./context/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import Reports from "./pages/reports";
 import "./App.css";
 
 function App() {
@@ -82,6 +83,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Visualization />
+                    </ProtectedRoute>
+                  }
+                />
+                 <Route
+                  path="Reports"
+                  element={
+                    <ProtectedRoute>
+                      <Reports/>
                     </ProtectedRoute>
                   }
                 />
