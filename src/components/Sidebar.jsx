@@ -8,7 +8,7 @@ import {
   FaChartLine,
   FaRegFileAlt,
 } from "react-icons/fa";
-import "./Sidebar.css"; // Import the CSS
+import "./Sidebar.css"; // Make sure file is named exactly Sidebar.css
 
 function Sidebar({ onToggle }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ function Sidebar({ onToggle }) {
   const toggleSidebar = () => {
     const newState = !isOpen;
     setIsOpen(newState);
-    onToggle(newState);
+    if (onToggle) onToggle(newState); // safeguard if prop is missing
   };
 
   return (
@@ -35,63 +35,55 @@ function Sidebar({ onToggle }) {
         flexDirection: "column",
       }}
     >
-      <div>
-        {/* Toggle Button */}
-        <button
-          onClick={toggleSidebar}
-          style={{
-            background: "#142850",
-            border: "none",
-            color: "white",
-            fontSize: "20px",
-            margin: "10px",
-            cursor: "pointer",
-            padding: "10px 15px",
-            borderRadius: "6px",
-            transition: "background 0.3s",
-          }}
-          onMouseEnter={(e) => (e.target.style.background = "#1f4068")}
-          onMouseLeave={(e) => (e.target.style.background = "#142850")}
+      {/* Toggle Button */}
+      <button
+        onClick={toggleSidebar}
+        style={{
+          background: "#142850",
+          border: "none",
+          color: "white",
+          fontSize: "20px",
+          margin: "10px",
+          cursor: "pointer",
+          padding: "10px 15px",
+          borderRadius: "6px",
+          transition: "background 0.3s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.background = "#1f4068")}
+        onMouseLeave={(e) => (e.currentTarget.style.background = "#142850")}
+      >
+        <FaBars />
+      </button>
+
+      {/* Links */}
+      <div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
         >
-          <FaBars />
-        </button>
+          <FaTachometerAlt /> {isOpen && "Dashboard"}
+        </NavLink>
 
-        {/* Links */}
-        <div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
-          <NavLink
-            to="/dashboard"
-            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
-          >
-            <FaTachometerAlt /> {isOpen && "Dashboard"}
-          </NavLink>
+        <NavLink
+          to="/upload"
+          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+        >
+          <FaUpload /> {isOpen && "Upload"}
+        </NavLink>
 
-          <NavLink
-            to="/upload"
-            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
-          >
-            <FaUpload /> {isOpen && "Upload"}
-          </NavLink>
+        <NavLink
+          to="/visualization"
+          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+        >
+          <FaChartLine /> {isOpen && "Visualization"}
+        </NavLink>
 
-          <NavLink
-            to="/visualization"
-            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
-          >
-            <FaChartLine /> {isOpen && "Visualization"}
-          </NavLink>
-
-          <NavLink
-            to="/reports"
-            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
-          >
-            <FaRegFileAlt /> {isOpen && "Reports"}
-          </NavLink>
-           <NavLink
-            to="/C"
-            className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
-          >
-            <FaRegFileAlt /> {isOpen && "Reports"}
-          </NavLink>
-        </div>
+        <NavLink
+          to="/reports"
+          className={({ isActive }) => `Sidebar-link ${isActive ? "active" : ""}`}
+        >
+          <FaRegFileAlt /> {isOpen && "Reports"}
+        </NavLink>
       </div>
     </div>
   );
