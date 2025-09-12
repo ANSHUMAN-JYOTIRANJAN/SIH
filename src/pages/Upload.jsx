@@ -1,29 +1,66 @@
 import React, { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";  // 👈 add navigation
 import HMPIGauge from "../components/HMPIGauge";
+import "./Upload.css";
 
 function Upload() {
+  const navigate = useNavigate();
+
+  const locations = [
+    { city: "Ranchi", state: "Jharkhand", country: "India" },
+    { city: "Delhi", state: "Delhi", country: "India" },
+    { city: "Bhubaneswar", state: "Odisha", country: "India" }
+  ];
+
   const [formData, setFormData] = useState({
-    iron: "", copper: "", zinc: "", lead: "", cadmium: ""
+    city: "",
+    state: "",
+    country: "",
+    iron: "",
+    copper: "",
+    zinc: "",
+    lead: "",
+    cadmium: ""
   });
 
   const [prediction, setPrediction] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  const handleLocationChange = (e) => {
+    const location = locations.find((loc) => loc.city === e.target.value);
+    if (location) {
+      setFormData((prev) => ({
+        ...prev,
+        city: location.city,
+        state: location.state,
+        country: location.country
+      }));
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePredict = () => {
-    const values = Object.values(formData).map(Number);
-    if (values.some(val => isNaN(val) || val === "")) {
-      alert("⚠️ Please enter valid values for all fields.");
+    if (!formData.city || !formData.state || !formData.country) {
+      alert("⚠️ Please select your location.");
       return;
     }
+
+    const values = ["iron", "copper", "zinc", "lead", "cadmium"].map((m) =>
+      Number(formData[m])
+    );
+    if (values.some((val) => isNaN(val) || val === "")) {
+      alert("⚠️ Please enter valid values for all metal fields.");
+      return;
+    }
+
     const hmpiValue = (
-      Number(formData.lead) * 20 + 
-      Number(formData.cadmium) * 15 + 
+      Number(formData.lead) * 20 +
+      Number(formData.cadmium) * 15 +
       Number(formData.iron) * 5 +
       Number(formData.copper) * 3 +
       Number(formData.zinc) * 2
@@ -52,155 +89,124 @@ function Upload() {
     document.getElementById("fileInput").click();
   };
 
+  // 👇 Navigate to Visualization page
+  const handleVisualize = () => {
+    navigate("/visualization", { state: { formData, prediction } });
+  };
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: `linear-gradient(135deg, rgba(37, 99, 235,0.8), rgba(30, 58, 138,0.8)), 
-                     url('https://images.unsplash.com/photo-1582719478141-4a2d3a3e7ef4?auto=format&fit=crop&w=1600&q=80')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        padding: "40px 20px",
-      }}
-    >
-      <div
-        style={{
-          background: "rgba(255,255,255,0.95)",
-          padding: "30px",
-          borderRadius: "16px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
-          width: "100%",
-          maxWidth: "950px",
-          display: "flex",
-          gap: "25px",
-          flexWrap: "wrap"
-        }}
-      >
+    <div className="upload-wrapper">
+      <div className="upload-card">
         {/* Input Form */}
-        <div style={{ flex: 1, minWidth: "280px" }}>
-          <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#1e3a8a" }}>
-            HMPI Calculator
-          </h2>
+        <div className="form-section">
+          <h2>Location & HMPI Calculator</h2>
+
           <form>
+            {/* Location Section */}
+            <h3>🌍 Location Details</h3>
+            <div className="input-row">
+              <label>Select Location:</label>
+              <select onChange={handleLocationChange} value={formData.city}>
+                <option value="">-- Choose a location --</option>
+                {locations.map((loc, index) => (
+                  <option key={index} value={loc.city}>
+                    {loc.city}, {loc.state}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {formData.city && (
+              <div className="input-row">
+                <p>
+                  <strong>Selected:</strong> {formData.city}, {formData.state},{" "}
+                  {formData.country}
+                </p>
+              </div>
+            )}
+
+            {/* Metals Section */}
+            <h3>⚗️ Metal Concentrations</h3>
             {["iron", "copper", "zinc", "lead", "cadmium"].map((metal) => (
-              <div style={{ marginBottom: "15px", display: "flex", justifyContent: "space-between", alignItems: "center" }} key={metal}>
-                <label style={{ fontWeight: "600", color: "#1e3a8a" }}>
-                  {metal.charAt(0).toUpperCase() + metal.slice(1)}:
-                </label>
+              <div className="input-row" key={metal}>
+                <label>{metal.charAt(0).toUpperCase() + metal.slice(1)}:</label>
                 <input
                   type="number"
                   name={metal}
                   value={formData[metal]}
                   onChange={handleChange}
-                  placeholder={`Enter ${metal}`}
-                  style={{
-                    flex: "1",
-                    marginLeft: "10px",
-                    padding: "10px",
-                    borderRadius: "8px",
-                    border: "1px solid #ccc",
-                    fontSize: "14px"
-                  }}
+                  placeholder={`Enter ${metal} (mg/L)`}
                 />
               </div>
             ))}
 
-            <button
-              type="button"
-              onClick={handlePredict}
-              style={{
-                width: "100%",
-                padding: "14px",
-                background: "#2563eb",
-                color: "#fff",
-                border: "none",
-                borderRadius: "10px",
-                cursor: "pointer",
-                fontWeight: "700",
-                fontSize: "16px",
-                marginTop: "10px",
-                transition: "transform 0.25s ease",
-              }}
-              onMouseEnter={(e) => e.target.style.transform = "scale(1.05)"}
-              onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
-            >
+            <button type="button" onClick={handlePredict} className="calc-btn">
               CALCULATE
             </button>
           </form>
         </div>
 
         {/* Results */}
-        <div style={{ flex: 1, minWidth: "280px", borderLeft: "1px solid #ddd", paddingLeft: "20px" }}>
-          <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#1e3a8a" }}>
-            Results
-          </h2>
+        <div className="results-section">
+          <h2>Results</h2>
 
           {prediction ? (
-            <div style={{ background: "#f0f4ff", padding: "20px", borderRadius: "12px", textAlign: "center" }}>
-              <img 
-                src="https://images.unsplash.com/photo-1581091215363-12b3e9decd24?auto=format&fit=crop&w=500&q=60" 
-                alt="Water Illustration" 
-                style={{ width: "100px", marginBottom: "15px", borderRadius: "50%" }}
-              />
-              <div style={{ marginBottom: "10px" }}>
-                <span style={{ fontWeight: "bold", color: "#1e3a8a" }}>HMPI Value</span>
-                <span style={{ display: "block", fontSize: "2.2rem", fontWeight: "bold" }}>{prediction.hmpiValue}</span>
+            <div className="results-box">
+              <div>
+                <span className="label">📍 Location</span>
+                <p>
+                  {formData.city}, {formData.state}, {formData.country}
+                </p>
               </div>
-              <div style={{ marginBottom: "10px" }}>
-                <span style={{ fontWeight: "bold", color: "#1e3a8a" }}>Risk Status</span>
-                <span style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", color: prediction.riskStatus === "Unsafe" ? "red" : prediction.riskStatus === "Moderate Risk" ? "orange" : "green" }}>
+
+              <div>
+                <span className="label">HMPI Value</span>
+                <span className="value">{prediction.hmpiValue}</span>
+              </div>
+              <div>
+                <span className="label">Risk Status</span>
+                <span
+                  className="value"
+                  style={{
+                    color:
+                      prediction.riskStatus === "Unsafe"
+                        ? "red"
+                        : prediction.riskStatus === "Moderate Risk"
+                        ? "orange"
+                        : "green",
+                  }}
+                >
                   {prediction.riskStatus}
                 </span>
               </div>
-              <div style={{ marginBottom: "10px" }}>
-                <span style={{ fontWeight: "bold", color: "#1e3a8a" }}>Recommendation</span>
-                <p style={{ fontSize: "1rem", color: "#333" }}>{prediction.recommendation}</p>
+              <div>
+                <span className="label">Recommendation</span>
+                <p>{prediction.recommendation}</p>
               </div>
-              <HMPIGauge hmpiValue={Number(prediction.hmpiValue)} /> 
+              <HMPIGauge hmpiValue={Number(prediction.hmpiValue)} />
+
+              {/* 👇 New Visualize Button */}
+              <button onClick={handleVisualize} className="calc-btn" style={{ marginTop: "15px", background: "#22c55e" }}>
+                📊 Visualize Data
+              </button>
             </div>
           ) : (
-            <div style={{ textAlign: "center", color: "#888", marginTop: "30px" }}>
-              <p>Enter values and click Calculate</p>
-              
+            <div className="empty-results">
+              <p>Select location + enter values and click Calculate</p>
             </div>
           )}
 
           {/* File Upload */}
-          <div style={{ marginTop: "25px", textAlign: "center" }}>
-            <input 
-              type="file" 
-              id="fileInput" 
-              style={{ display: "none" }} 
-              onChange={handleFileChange} 
+          <div className="file-upload">
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
             />
-            <button 
+            <button
               onClick={handleUploadClick}
-              style={{
-                width: "100%",
-                padding: "14px",
-                background: selectedFile ? "#22c55e" : "#fff",
-                color: selectedFile ? "#fff" : "#2563eb",
-                border: `2px solid #2563eb`,
-                borderRadius: "12px",
-                cursor: "pointer",
-                fontWeight: "700",
-                fontSize: "16px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (!selectedFile) { e.target.style.background = "#2563eb"; e.target.style.color = "#fff"; }
-                e.target.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                if (!selectedFile) { e.target.style.background = "#fff"; e.target.style.color = "#2563eb"; }
-                e.target.style.transform = "scale(1)";
-              }}
+              className={`upload-btn ${selectedFile ? "uploaded" : ""}`}
             >
               <FaCloudUploadAlt style={{ marginRight: "8px" }} />
               {selectedFile ? selectedFile.name : "CHOOSE FILE"}

@@ -1,6 +1,7 @@
 import React from "react";
 import "./SummaryCards.css";
 import { FaVial, FaExclamationTriangle, FaShieldAlt, FaClock } from "react-icons/fa";
+import CountUp from "react-countup";
 
 const SummaryCards = ({ totalSamples, highRiskAreas, safePercent, lastUpdated }) => {
   return (
@@ -11,7 +12,9 @@ const SummaryCards = ({ totalSamples, highRiskAreas, safePercent, lastUpdated })
           <FaVial />
         </div>
         <div>
-          <h3>{totalSamples}</h3>
+          <h3 className="number-highlight">
+            <CountUp end={totalSamples} duration={2} separator="," />
+          </h3>
           <p>Total Samples</p>
         </div>
       </div>
@@ -22,7 +25,9 @@ const SummaryCards = ({ totalSamples, highRiskAreas, safePercent, lastUpdated })
           <FaExclamationTriangle />
         </div>
         <div>
-          <h3>{highRiskAreas}</h3>
+          <h3 className="number-highlight danger">
+            <CountUp end={highRiskAreas} duration={2} />
+          </h3>
           <p>High Risk Areas</p>
         </div>
       </div>
@@ -33,7 +38,9 @@ const SummaryCards = ({ totalSamples, highRiskAreas, safePercent, lastUpdated })
           <FaShieldAlt />
         </div>
         <div>
-          <h3>{safePercent}%</h3>
+          <h3 className="number-highlight success">
+            <CountUp end={safePercent} duration={2} />%
+          </h3>
           <p>Safe Zones</p>
         </div>
       </div>
@@ -44,7 +51,7 @@ const SummaryCards = ({ totalSamples, highRiskAreas, safePercent, lastUpdated })
           <FaClock />
         </div>
         <div>
-          <h3>{lastUpdated}</h3>
+          <h3 className="number-highlight subtle">{lastUpdated}</h3>
           <p>Last Updated</p>
         </div>
       </div>
