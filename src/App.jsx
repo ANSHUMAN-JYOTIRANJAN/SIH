@@ -1,18 +1,25 @@
 // src/App.js
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Pages
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
 import Upload from "./pages/Upload";
 import Search from "./pages/Search";
 import Visualization from "./pages/Visualization";
+import Reports from "./pages/Reports";
+
+// Components
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+
+// Context
 import ProtectedRoute from "./context/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
-import Reports from "./pages/reports";
+
 import "./App.css";
 
 function App() {
@@ -26,7 +33,7 @@ function App() {
           style={{
             minHeight: "100vh",
             background:
-              "linear-gradient(90deg, #132758 60%, #243375 100%)", // Unified blue blend background
+              "linear-gradient(90deg, #132758 60%, #243375 100%)",
             margin: 0,
           }}
         >
@@ -46,14 +53,17 @@ function App() {
                 marginTop: "70px",
                 transition: "margin-left 0.3s, margin-top 0.3s",
                 padding: "20px",
-                background: "transparent", // Remove any default white!
-                minHeight: "calc(100vh - 70px - 40px)", // Adjust if footer is taller
+                background: "transparent",
+                minHeight: "calc(100vh - 70px - 40px)",
               }}
             >
               <Routes>
+                {/* Public Routes */}
                 <Route path="/" element={<Signup />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/login" element={<Login />} />
+
+                {/* Protected Routes */}
                 <Route
                   path="/dashboard"
                   element={
@@ -86,11 +96,11 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                 <Route
-                  path="Reports"
+                <Route
+                  path="/reports" // ✅ fixed path to lowercase and leading slash
                   element={
                     <ProtectedRoute>
-                      <Reports/>
+                      <Reports />
                     </ProtectedRoute>
                   }
                 />
