@@ -144,9 +144,8 @@ const Dashboard = ({ sidebarOpen }) => {
               setFilters({ ...filters, metalType: e.target.value })
             }
           >
-            <option value="pH">pH</option>
-            <option value="TDS">TDS</option>
-            <option value="EC">EC</option>
+            <option value="HMPI">HMPI</option>
+            
           </select>
         </div>
 
