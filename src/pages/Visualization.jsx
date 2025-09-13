@@ -16,7 +16,7 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 function Visualization() {
-  // 📌 Get data passed from Upload.jsx
+  // Get data passed from Upload.jsx
   const location = useLocation();
   const { formData, prediction } = location.state || {};
 
@@ -75,11 +75,11 @@ function Visualization() {
 
   // ==================== TABLE ====================
   const topContaminated = [
-    { sample: "Sample 3", total: 95, status: "Very High" },
-    { sample: "Sample 2", total: 90, status: "High" },
-    { sample: "Sample 1", total: 75, status: "High" },
-    { sample: "Sample 5", total: 60, status: "Medium" },
-    { sample: "Sample 4", total: 50, status: "Low" },
+    { sample: "Sample 3", total: 95, status: "Unsafe" },
+    { sample: "Sample 2", total: 90, status: "Moderate Risk" },
+    { sample: "Sample 1", total: 75, status: "Moderate Risk" },
+    { sample: "Sample 5", total: 60, status: "Safe" },
+    { sample: "Sample 4", total: 50, status: "Safe" },
   ];
 
   if (formData && prediction) {
@@ -118,10 +118,17 @@ function Visualization() {
   };
 
   const getAlertIcon = (status) => {
-    if (status === "Very High") return "🔴";
-    if (status === "High") return "⚠️";
-    if (status === "Medium") return "🟡";
-    return "🟢";
+    if (status === "Unsafe") return "🔴";
+    if (status === "Moderate Risk") return "⚠️";
+    if (status === "Safe") return "🟢";
+    return "⚪";
+  };
+
+  const getStatusColor = (status) => {
+    if (status === "Unsafe") return "#ff4d4d";
+    if (status === "Moderate Risk") return "#ffa500";
+    if (status === "Safe") return "#00ff00";
+    return "#e0e0e0";
   };
 
   // ==================== RENDER ====================
@@ -226,14 +233,7 @@ function Visualization() {
                   <td
                     style={{
                       ...tdStyle,
-                      color:
-                        item.status === "Very High"
-                          ? "#ff4d4d"
-                          : item.status === "High"
-                          ? "#ffa500"
-                          : item.status === "Medium"
-                          ? "#ffd700"
-                          : "#00ff00",
+                      color: getStatusColor(item.status),
                       fontWeight: "600",
                     }}
                   >

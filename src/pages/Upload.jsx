@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";  // 👈 add navigation
+import { useNavigate } from "react-router-dom";
 import HMPIGauge from "../components/HMPIGauge";
 import "./Upload.css";
 
@@ -10,7 +10,7 @@ function Upload() {
   const locations = [
     { city: "Ranchi", state: "Jharkhand", country: "India" },
     { city: "Delhi", state: "Delhi", country: "India" },
-    { city: "Bhubaneswar", state: "Odisha", country: "India" }
+    { city: "Bhubaneswar", state: "Odisha", country: "India" },
   ];
 
   const [formData, setFormData] = useState({
@@ -21,12 +21,30 @@ function Upload() {
     copper: "",
     zinc: "",
     lead: "",
-    cadmium: ""
+    cadmium: "",
   });
 
   const [prediction, setPrediction] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // ===== Safe limits (mg/L) & weights for HMPI =====
+  const safeLimits = {
+    lead: 0.01,
+    cadmium: 0.003,
+    iron: 0.3,
+    copper: 1,
+    zinc: 5
+  };
+
+  const weights = {
+    lead: 0.25,
+    cadmium: 0.25,
+    iron: 0.2,
+    copper: 0.15,
+    zinc: 0.15
+  };
+
+  // ===== Handlers =====
   const handleLocationChange = (e) => {
     const location = locations.find((loc) => loc.city === e.target.value);
     if (location) {
@@ -34,7 +52,7 @@ function Upload() {
         ...prev,
         city: location.city,
         state: location.state,
-        country: location.country
+        country: location.country,
       }));
     }
   };
@@ -45,38 +63,53 @@ function Upload() {
   };
 
   const handlePredict = () => {
+    // Validate location
     if (!formData.city || !formData.state || !formData.country) {
       alert("⚠️ Please select your location.");
       return;
     }
 
-    const values = ["iron", "copper", "zinc", "lead", "cadmium"].map((m) =>
-      Number(formData[m])
-    );
-    if (values.some((val) => isNaN(val) || val === "")) {
-      alert("⚠️ Please enter valid values for all metal fields.");
+    const metals = ["iron", "copper", "zinc", "lead", "cadmium"];
+    const values = metals.map((m) => Number(formData[m]));
+
+    if (values.some((val) => isNaN(val))) {
+      alert("⚠️ Please enter valid numeric values for all metals.");
       return;
     }
 
-    const hmpiValue = (
-      Number(formData.lead) * 20 +
-      Number(formData.cadmium) * 15 +
-      Number(formData.iron) * 5 +
-      Number(formData.copper) * 3 +
-      Number(formData.zinc) * 2
-    ).toFixed(2);
+    // Calculate H_i for each metal
+    const H = {
+      lead: values[3] / safeLimits.lead,
+      cadmium: values[4] / safeLimits.cadmium,
+      iron: values[0] / safeLimits.iron,
+      copper: values[1] / safeLimits.copper,
+      zinc: values[2] / safeLimits.zinc
+    };
 
-    let riskStatus = "Safe";
-    let recommendation = "✅ Water is safe to drink.";
-    if (hmpiValue > 100) {
-      riskStatus = "Unsafe";
-      recommendation = "❌ Avoid drinking, water treatment required.";
-    } else if (hmpiValue > 50) {
-      riskStatus = "Moderate Risk";
-      recommendation = "⚠️ Use with caution. Further testing recommended.";
+    // Calculate HMPI
+    let hmpi = 0;
+    for (let metal in H) {
+      hmpi += H[metal] * weights[metal];
     }
 
-    setPrediction({ hmpiValue, riskStatus, recommendation });
+    const hmpiScaled = Number((hmpi * 10).toFixed(2)); // optional scaling for readability
+
+    // Risk classification
+    let riskStatus = "";
+    let recommendation = "";
+
+    if (hmpiScaled <= 50) {
+      riskStatus = "Safe";
+      recommendation = "✅ Water is safe to drink.";
+    } else if (hmpiScaled <= 70) {
+      riskStatus = "Moderate Risk";
+      recommendation = "⚠️ Use with caution. Further testing recommended.";
+    } else {
+      riskStatus = "Unsafe";
+      recommendation = "❌ Avoid drinking, water treatment required.";
+    }
+
+    setPrediction({ hmpiValue: hmpiScaled, riskStatus, recommendation });
   };
 
   const handleFileChange = (e) => {
@@ -89,20 +122,18 @@ function Upload() {
     document.getElementById("fileInput").click();
   };
 
-  // 👇 Navigate to Visualization page
   const handleVisualize = () => {
     navigate("/visualization", { state: { formData, prediction } });
   };
 
+  // ===== Render =====
   return (
     <div className="upload-wrapper">
       <div className="upload-card">
-        {/* Input Form */}
+        {/* Form Section */}
         <div className="form-section">
           <h2>Location & HMPI Calculator</h2>
-
           <form>
-            {/* Location Section */}
             <h3>🌍 Location Details</h3>
             <div className="input-row">
               <label>Select Location:</label>
@@ -125,7 +156,6 @@ function Upload() {
               </div>
             )}
 
-            {/* Metals Section */}
             <h3>⚗️ Metal Concentrations</h3>
             {["iron", "copper", "zinc", "lead", "cadmium"].map((metal) => (
               <div className="input-row" key={metal}>
@@ -146,10 +176,9 @@ function Upload() {
           </form>
         </div>
 
-        {/* Results */}
+        {/* Results Section */}
         <div className="results-section">
           <h2>Results</h2>
-
           {prediction ? (
             <div className="results-box">
               <div>
@@ -163,6 +192,7 @@ function Upload() {
                 <span className="label">HMPI Value</span>
                 <span className="value">{prediction.hmpiValue}</span>
               </div>
+
               <div>
                 <span className="label">Risk Status</span>
                 <span
@@ -179,14 +209,19 @@ function Upload() {
                   {prediction.riskStatus}
                 </span>
               </div>
+
               <div>
                 <span className="label">Recommendation</span>
                 <p>{prediction.recommendation}</p>
               </div>
-              <HMPIGauge hmpiValue={Number(prediction.hmpiValue)} />
 
-              {/* 👇 New Visualize Button */}
-              <button onClick={handleVisualize} className="calc-btn" style={{ marginTop: "15px", background: "#22c55e" }}>
+              <HMPIGauge hmpiValue={prediction.hmpiValue} />
+
+              <button
+                onClick={handleVisualize}
+                className="calc-btn"
+                style={{ marginTop: "15px", background: "#22c55e" }}
+              >
                 📊 Visualize Data
               </button>
             </div>

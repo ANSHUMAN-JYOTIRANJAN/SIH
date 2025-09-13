@@ -50,6 +50,51 @@
   color: #ffffff;
 }
 
+/* Filters Section */
+.filters-container {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.filter-item {
+  flex: 1;
+  min-width: 160px;
+  background: #142850;
+  border-radius: 10px;
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.filter-item select,
+.filter-item input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #0d1b33;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-item select:focus,
+.filter-item input:focus {
+  border-color: #4dabf7;
+  box-shadow: 0 0 6px rgba(77, 171, 247, 0.5);
+}
+
 /* Map Card */
 .map-card {
   grid-column: 1 / -1;
@@ -77,17 +122,17 @@
   min-width: 250px;
 }
 
-/* Enhanced Hover for Bottom Row Cards with background change */
+/* Enhanced Hover */
 .trend-card:hover,
 .bar-card:hover,
 .alert-card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
-  background: #1f3a72; /* Slightly lighter blue for hover */
+  background: #1f3a72;
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 1024px) {
   .dashboard-row {
     flex-wrap: wrap;
