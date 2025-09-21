@@ -101,10 +101,11 @@ const Dashboard = ({ sidebarOpen }) => {
 
     return () => {
       map.remove();
+
     };
   }, [filters]);
 
-  // ✅ Yearly trends data
+  //
   const timeSeriesData = [
     { year: 2018, Pb: 25, Cd: 15, As: 12, Hg: 10 },
     { year: 2019, Pb: 30, Cd: 18, As: 20, Hg: 15 },
@@ -145,6 +146,9 @@ const Dashboard = ({ sidebarOpen }) => {
             }
           >
             <option value="HMPI">HMPI</option>
+            <option value="PH">PH</option>
+            <option value="TDS">TDS</option>
+            <option value="EC">EC</option>
             
           </select>
         </div>

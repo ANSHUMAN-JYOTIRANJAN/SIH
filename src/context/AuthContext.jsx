@@ -1,45 +1,90 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { supabase } from "../supabaseClient";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load user from localStorage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const getSession = async () => {
+      try {
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+        if (error) throw error;
+        setUser(session?.user ?? null);
+      } catch (err) {
+        console.error("Error getting session:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const signup = (email, role) => {
-    const newUser = { email, role };
-    localStorage.setItem("user", JSON.stringify(newUser));
-    setUser(newUser);
-  };
+  const signup = async (email, password, role) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { role },
+        },
+      });
 
-  const login = (email) => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      if (parsed.email === email) {
-        setUser(parsed);
-      } else {
-        alert("User not found. Please signup first.");
+      if (error) throw error;
+
+      if (!data.user) {
+        return { message: "Signup successful! Check your email to confirm." };
       }
-    } else {
-      alert("No user exists. Please signup first.");
+
+      return data;
+    } catch (err) {
+      console.error("Signup error:", err.message);
+      throw err;
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+  const login = async (email, password) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+      return data;
+    } catch (err) {
+      console.error("Login error:", err.message);
+      throw err;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+    } catch (err) {
+      console.error("Logout error:", err.message);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, loading, signup, login, logout }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

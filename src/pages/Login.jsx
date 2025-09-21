@@ -7,13 +7,28 @@ import "./Auth.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(email);
-    navigate("/dashboard");
+    setError(null);
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (err) {
+      if (err.message.includes("Email not confirmed")) {
+        setError("Please check your email and confirm your account first.");
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,6 +42,7 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoFocus
           />
           <input
             type="password"
@@ -35,9 +51,14 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+          {error && <p className="error">{error}</p>}
         </form>
-        <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+        <p>
+          Don't have an account? <Link to="/signup">Sign Up</Link>
+        </p>
       </div>
     </div>
   );
