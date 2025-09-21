@@ -18,14 +18,10 @@ function Login() {
     setLoading(true);
 
     try {
-      await login(email, password);
+      await login(email, password); // calls AuthContext login
       navigate("/dashboard");
     } catch (err) {
-      if (err.message.includes("Email not confirmed")) {
-        setError("Please check your email and confirm your account first.");
-      } else {
-        setError(err.message);
-      }
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -57,7 +53,7 @@ function Login() {
           {error && <p className="error">{error}</p>}
         </form>
         <p>
-          Don't have an account? <Link to="/signup">Sign Up</Link>
+          Don&apos;t have an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
     </div>

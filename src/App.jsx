@@ -10,7 +10,7 @@ import Upload from "./pages/Upload";
 import Search from "./pages/Search";
 import Visualization from "./pages/Visualization";
 import Reports from "./pages/Reports";
-import Unauthorized from "./pages/Unauthorized";
+
 
 // Components
 import Sidebar from "./components/Sidebar";
@@ -139,8 +139,7 @@ function App() {
                   }
                 />
 
-                {/* Unauthorized page */}
-                <Route path="/unauthorized" element={<Unauthorized />} />
+              
 
                 {/* Catch-all route */}
                 <Route path="*" element={<Navigate to="/" replace />} />
