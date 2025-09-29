@@ -1,11 +1,13 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+
 import "./Auth.css";
+import { useAuth } from "../context/AuthContext";
 
 function Signup() {
   const [email, setEmail] = useState("");
+  const [fullname, setFullname] = useState(""); // optional -> saves to users.fullname
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user"); // default role
   const [error, setError] = useState(null);
@@ -19,10 +21,12 @@ function Signup() {
     setLoading(true);
 
     try {
-      await signup(email, password, role);
-      navigate("/dashboard"); // redirect after signup
+      await signup(email, password, role, fullname);
+      // If your project requires email confirmation, you might
+      // want to show a "Check your inbox" screen instead.
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -40,6 +44,12 @@ function Signup() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoFocus
+          />
+          <input
+            type="text"
+            placeholder="Full name (optional)"
+            value={fullname}
+            onChange={(e) => setFullname(e.target.value)}
           />
           <input
             type="password"

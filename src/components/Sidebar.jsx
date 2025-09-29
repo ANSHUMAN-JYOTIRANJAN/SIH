@@ -1,4 +1,4 @@
-// src/components/sidebar.jsx
+// src/components/Sidebar.jsx
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -8,7 +8,14 @@ import {
   FaChartLine,
   FaRegFileAlt,
 } from "react-icons/fa";
-import "./sidebar.css"; // ✅ file must be lowercase
+import "./sidebar.css";
+
+const menuItems = [
+  { path: "/dashboard", label: "Dashboard", icon: <FaTachometerAlt /> },
+  { path: "/upload", label: "Upload", icon: <FaUpload /> },
+  // { path: "/visualization", label: "Visualization", icon: <FaChartLine /> },
+  { path: "/reports", label: "Reports", icon: <FaRegFileAlt /> },
+];
 
 function Sidebar({ onToggle }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +28,7 @@ function Sidebar({ onToggle }) {
 
   return (
     <div
+      className={`sidebar ${isOpen ? "open" : "collapsed"}`}
       style={{
         width: isOpen ? "200px" : "60px",
         background: "linear-gradient(180deg, #1a2a6c, #0d1b33)",
@@ -38,52 +46,37 @@ function Sidebar({ onToggle }) {
       {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
+        className="toggle-btn"
         style={{
           background: "#142850",
           border: "none",
           color: "white",
           fontSize: "20px",
-          margin: "10px",
+          margin: "10px auto",
           cursor: "pointer",
           padding: "10px 15px",
           borderRadius: "6px",
           transition: "background 0.3s",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = "#1f4068")}
-        onMouseLeave={(e) => (e.currentTarget.style.background = "#142850")}
       >
         <FaBars />
       </button>
 
-      {/* Links */}
-      <div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
-        <NavLink
-          to="/dashboard"
-          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-        >
-          <FaTachometerAlt /> {isOpen && "Dashboard"}
-        </NavLink>
-
-        <NavLink
-          to="/upload"
-          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-        >
-          <FaUpload /> {isOpen && "Upload"}
-        </NavLink>
-
-        <NavLink
-          to="/visualization"
-          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-        >
-          <FaChartLine /> {isOpen && "Visualization"}
-        </NavLink>
-
-        <NavLink
-          to="/reports"
-          className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-        >
-          <FaRegFileAlt /> {isOpen && "Reports"}
-        </NavLink>
+      {/* Menu Items */}
+      <div className="sidebar-links" style={{ marginTop: "20px", flex: 1 }}>
+        {menuItems.map(({ path, label, icon }) => (
+          <NavLink
+            key={path}
+            to={path}
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+            title={!isOpen ? label : ""}
+          >
+            <span className="icon">{icon}</span>
+            {isOpen && <span className="label">{label}</span>}
+          </NavLink>
+        ))}
       </div>
     </div>
   );

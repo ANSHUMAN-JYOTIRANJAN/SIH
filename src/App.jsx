@@ -1,6 +1,11 @@
 // src/App.js
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -10,7 +15,6 @@ import Upload from "./pages/Upload";
 import Search from "./pages/Search";
 import Visualization from "./pages/Visualization";
 import Reports from "./pages/Reports";
-
 
 // Components
 import Sidebar from "./components/Sidebar";
@@ -85,66 +89,69 @@ function App() {
           {/* Protected Routes with Layout */}
           <Route
             path="/*"
-            element={<AppLayout sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}>
-              <Routes>
-                {/* Dashboard and general pages (all logged-in users) */}
-                <Route
-                  path="/"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/upload"
-                  element={
-                    <ProtectedRoute>
-                      <Upload />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/search"
-                  element={
-                    <ProtectedRoute>
-                      <Search />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/visualization"
-                  element={
-                    <ProtectedRoute>
-                      <Visualization />
-                    </ProtectedRoute>
-                  }
-                />
+            element={
+              <AppLayout
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
+              >
+                <Routes>
+                  {/* Dashboard and general pages (all logged-in users) */}
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/upload"
+                    element={
+                      <ProtectedRoute>
+                        <Upload />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/search"
+                    element={
+                      <ProtectedRoute>
+                        <Search />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/visualization"
+                    element={
+                      <ProtectedRoute>
+                        <Visualization />
+                      </ProtectedRoute>
+                    }
+                  />
 
-                {/* Reports page only for admin */}
-                <Route
-                  path="/reports"
-                  element={
-                    <ProtectedRoute allowedRoles={["admin"]}>
-                      <Reports />
-                    </ProtectedRoute>
-                  }
-                />
+                  {/* Reports page only for admin */}
+                  <Route
+                    path="/reports"
+                    element={
+                      <ProtectedRoute allowedRoles={["admin"]}>
+                        <Reports />
+                      </ProtectedRoute>
+                    }
+                  />
 
-              
-
-                {/* Catch-all route */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </AppLayout>}
+                  {/* Catch-all route */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </AppLayout>
+            }
           />
         </Routes>
       </Router>

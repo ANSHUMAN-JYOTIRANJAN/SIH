@@ -41,9 +41,9 @@ function Navbar({ sidebarOpen }) {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "20px", 
-          flexShrink: 0, 
-          marginRight:"30px"
+          gap: "20px",
+          flexShrink: 0,
+          marginRight: "30px",
         }}
       >
         {/* Search box */}
@@ -54,8 +54,7 @@ function Navbar({ sidebarOpen }) {
             background: "white",
             borderRadius: "20px",
             padding: "4px 10px",
-            maxWidth: "180px", 
-          
+            maxWidth: "180px",
           }}
         >
           <input
@@ -67,7 +66,7 @@ function Navbar({ sidebarOpen }) {
               flex: 1,
               fontSize: "14px",
               background: "transparent",
-              minWidth: "80px", 
+              minWidth: "80px",
             }}
           />
           <FaSearch style={{ color: "#2563eb", cursor: "pointer" }} />
