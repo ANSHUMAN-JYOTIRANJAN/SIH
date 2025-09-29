@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import React, { useState, useEffect, useRef } from "react"; 
 import SummaryCards from "../components/SummaryCards";
 import Alerts from "../components/Alerts";
@@ -514,7 +513,6 @@ useEffect(() => {
           </div>
         </div>
       </div>
-     
     </div>
   );
 };

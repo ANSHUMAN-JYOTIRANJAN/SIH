@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from "react";
 import {
   BrowserRouter as Router,
@@ -20,41 +19,56 @@ import Reports from "./pages/Reports";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ChatbotWidget from "./components/ChatbotWidget";
+import ChatWindow from "./components/ChatWindow";
 
 // Context
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./context/ProtectedRoute";
 
 // Layout wrapper for authenticated routes
-const AppLayout = ({ children, sidebarOpen, setSidebarOpen }) => (
-  <div
-    style={{
-      minHeight: "100vh",
-      background: "linear-gradient(90deg, #132758 60%, #243375 100%)",
-    }}
-  >
-    <Navbar sidebarOpen={sidebarOpen} />
-    <div style={{ display: "flex" }}>
-      <Sidebar onToggle={setSidebarOpen} />
-      <div
-        style={{
-          flex: 1,
-          marginLeft: sidebarOpen ? "200px" : "60px",
-          marginTop: "70px",
-          transition: "margin-left 0.3s, margin-top 0.3s",
-          padding: "20px",
-          background: "transparent",
-          minHeight: "calc(100vh - 70px - 40px)",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-    <Footer />
-  </div>
-);
+const AppLayout = ({ children, sidebarOpen, setSidebarOpen, isChatOpen, toggleChat }) => {
+  const { user } = useAuth();
 
-// Optional: Redirect logged-in users away from login/signup
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(90deg, #132758 60%, #243375 100%)",
+      }}
+    >
+      <Navbar sidebarOpen={sidebarOpen} />
+      <div style={{ display: "flex" }}>
+        <Sidebar onToggle={setSidebarOpen} />
+        <div
+          style={{
+            flex: 1,
+            marginLeft: sidebarOpen ? "200px" : "60px",
+            marginTop: "70px",
+            transition: "margin-left 0.3s, margin-top 0.3s",
+            padding: "20px",
+            background: "transparent",
+            minHeight: "calc(100vh - 70px - 40px)",
+          }}
+        >
+          {children}
+        </div>
+      </div>
+      <Footer />
+
+      {/* --- CHATBOT LOGIC --- */}
+      {user && (
+        <>
+          {/* UPDATED: This line now hides the widget when the chat is open */}
+          {!isChatOpen && <ChatbotWidget onToggle={toggleChat} />}
+          {isChatOpen && <ChatWindow onClose={toggleChat} />}
+        </>
+      )}
+    </div>
+  );
+};
+
+// ... (Rest of the file is the same)
 const RedirectIfLoggedIn = ({ children }) => {
   const { user } = useAuth();
   if (user) return <Navigate to="/dashboard" replace />;
@@ -63,6 +77,11 @@ const RedirectIfLoggedIn = ({ children }) => {
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const toggleChat = () => {
+    setIsChatOpen((prev) => !prev);
+  };
 
   return (
     <AuthProvider>
@@ -93,9 +112,10 @@ function App() {
               <AppLayout
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
+                isChatOpen={isChatOpen}
+                toggleChat={toggleChat}
               >
                 <Routes>
-                  {/* Dashboard and general pages (all logged-in users) */}
                   <Route
                     path="/"
                     element={
@@ -136,8 +156,6 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-
-                  {/* Reports page only for admin */}
                   <Route
                     path="/reports"
                     element={
@@ -146,8 +164,6 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-
-                  {/* Catch-all route */}
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </AppLayout>
